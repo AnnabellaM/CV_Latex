@@ -1,0 +1,514 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 79, 144} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+    pdftitle={Miao Miao's CV},
+    pdfauthor={Miao Miao},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    % \usepackage[T1]{fontenc} % this breaks sb2nov
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+
+
+% Some settings:
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0cm} % set column seperation
+\makeatletter
+\let\ps@customFooterStyle\ps@plain % Copy the plain style to customFooterStyle
+\patchcmd{\ps@customFooterStyle}{\thepage}{
+    \color{gray}\textit{\small Miao Miao - Page \thepage{} of \pageref*{LastPage}}
+}{}{} % replace number by desired string
+\makeatother
+\pagestyle{customFooterStyle}
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\circ$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.4 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0.2 cm + 0.00001 cm
+    }{
+        0.2 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0.2 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+        \small\color{gray}\textit{Last updated in March 2025}\hspace{\widthof{Last updated in September 2024}}
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+\renewcommand{\href}[2]{\hrefWithoutArrow{#1}{\ifthenelse{\equal{#2}{}}{ }{#2 }\raisebox{.15ex}{\footnotesize \faExternalLink*}}}
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{}
+
+    \placelastupdatedtext
+    \begin{header}
+        \textbf{\fontsize{24 pt}{24 pt}\selectfont Miao Miao}
+
+        \vspace{0.3 cm}
+
+        \normalsize
+        \mbox{{\color{black}\footnotesize\faMapMarker*}\hspace*{0.13cm}Dallas, TX}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{mailto:youremail@yourdomain.com}{\color{black}{\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}mmiao@utdallas.edu}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        % \mbox{\hrefWithoutArrow{tel:+90-541-999-99-99}{\color{black}{\footnotesize\faPhone*}\hspace*{0.13cm}469-922-7794}}%
+        % \kern 0.25 cm%
+        % \AND%
+        % \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://annabellam.github.io/}{\color{black}{\footnotesize\faLink}\hspace*{0.13cm}annabellam.github.io}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://linkedin.com/in/annabellamiao}{\color{black}{\footnotesize\faLinkedinIn}\hspace*{0.13cm}annabellamiao}}%
+        \kern 0.25 cm%
+        \AND%
+        \kern 0.25 cm%
+        \mbox{\hrefWithoutArrow{https://github.com/AnnabellaM}{\color{black}{\footnotesize\faGithub}\hspace*{0.13cm}AnnabellaM}}%
+    \end{header}
+
+    \vspace{0.3 cm - 0.3 cm}
+
+
+    \section{RESEARCH INTERESTS}
+        
+        \begin{onecolentry}
+        My research interest lies in program analysis and fuzz testing, and their applications in software reliability and security. I focus on enhancing the reliability and usability of static analysis tools by automatically detecting bugs and diagnosing their root causes. I also work on improving the fuzz testing evaluation process by developing benchmarks that integrate program characteristics, aiming for a more comprehensive and accurate assessment of fuzzing tools.
+        \end{onecolentry}
+
+    \section{EDUCATION}
+        
+        \begin{twocolentry}{
+            
+            
+        \textit{Jan 2023 - present}}
+            \textbf{Doctor of Philosophy, Software Engineering }
+
+            \textit{The University of Texas at Dallas, Richardson, Texas, USA}
+            
+            \textit{Advisor: Dr. Shiyi Wei}
+        \end{twocolentry}
+
+        \vspace{0.20 cm}
+        
+        \begin{twocolentry}{
+            
+            
+        \textit{Aug 2021 - Dec 2022}
+        
+        GPA: 3.97
+        
+        }
+        
+            \textbf{Master of Science, Software Engineering }
+
+            \textit{The University of Texas at Dallas, Richardson, Texas, USA}
+        \end{twocolentry}
+
+        \vspace{0.20 cm}
+        
+        \begin{twocolentry}{
+            
+            
+        \textit{Sep 2014 - June 2018}
+        
+        GPA: 3.59 
+        
+        }
+            \textbf{Bachelor of Engineering, Computer Science and Technology}
+
+            \textit{The Xi’an University of Finance and Economics, Xi’an, China}
+        \end{twocolentry}
+
+
+        \section{AWARDS}
+    
+        \begin{onecolentry}
+            \begin{highlights}
+                \item The Jonsson School Best Teaching Assistant Award in 2024.
+                \item The ACM SIGSOFT CAPS Travel Award for ICSE 2025.
+            \end{highlights}
+        \end{onecolentry}
+
+
+        
+    \section{PUBLICATIONS}
+
+    \begin{onecolentry}
+        \textit{* ICSE and ISSTA are top-tier conferences in Software Engineering, while TOSEM and EMSE are among the field's leading journals.}
+    \end{onecolentry}
+
+    \vspace{0.20 cm}
+
+        % \begin{samepage}
+            \begin{onecolentry}
+                \textbf{• Program Feature-based Benchmarking for Fuzz Testing}
+
+                % \vspace{0.10 cm}
+
+                \mbox{\textbf{Miao Miao}}, \mbox{Sriteja Kummita}, \mbox{Eric Bodden}, and \mbox{Shiyi Wei}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{In the 34th ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA), 2025.}
+            \end{onecolentry}
+
+
+            \vspace{0.20 cm}
+            
+            \begin{onecolentry}
+                \textbf{• An Extensive Empirical Study of Nondeterministic Behavior in Static Analysis Tools}
+
+                % \vspace{0.10 cm}
+
+                \mbox{\textbf{Miao Miao}}, \mbox{Austin Mordahl}, \mbox{Dakota Soles}, \mbox{Alice Beideck}, and \mbox{Shiyi Wei}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{In the 47th IEEE/ACM International Conference on Software Engineering (ICSE), 2025.}
+            \end{onecolentry}
+
+            \vspace{0.20 cm}
+            
+            \begin{onecolentry}
+                \textbf{• Program Feature-based Fuzzing Benchmarking}
+
+                % \vspace{0.10 cm}
+
+                \mbox{\textbf{Miao Miao}}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{In the 47th IEEE/ACM International Conference on Software Engineering, ACM Student Research Competition (ICSE-SRC), 2025.}
+            \end{onecolentry}
+
+            \vspace{0.20 cm}
+            
+            \begin{onecolentry}
+                \textbf{• Visualization Task Taxonomy to Understand the Fuzzing Internals (Registered Report)}
+
+                % \vspace{0.10 cm}
+
+                \mbox{Kummita Sriteja}, \mbox{\textbf{Miao Miao}}, \mbox{Bodden Eric}, and \mbox{Shiyi Wei}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{In the Proceedings of the 3rd ACM International Fuzzing Workshop (FUZZING), 2024.}
+            \end{onecolentry}
+
+            \vspace{0.20 cm}
+            
+            \begin{onecolentry}
+                \textbf{• ECSTATIC: Automatic Configuration-Aware Testing and Debugging of Static Analysis Tools}
+
+                % \vspace{0.10 cm}
+
+                \mbox{Austin Mordahl}, \mbox{Dakota Soles}, \mbox{\textbf{Miao Miao}}, \mbox{Zenong Zhang}, and \mbox{Shiyi Wei}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{In the 47th IEEE/ACM International Conference on Software Engineering (ICSE), 2025.}
+            \end{onecolentry}
+
+            \vspace{0.20 cm}
+
+            \begin{onecolentry}
+                \textbf{\underline{Papers Under Review}}
+
+            \end{onecolentry}
+
+            \vspace{0.20 cm}
+            
+            \begin{onecolentry}
+                \textbf{• Visualization Task Taxonomy to Understand the Fuzzing Internals}
+
+                % \vspace{0.10 cm}
+
+                \mbox{Kummita Sriteja}, \mbox{\textbf{Miao Miao}}, \mbox{Bodden Eric}, and \mbox{Shiyi Wei}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{Under review at ACM Transactions on Software Engineering and Methodology Journal, 2025.}
+            \end{onecolentry}
+
+            \vspace{0.20 cm}
+            
+            \begin{onecolentry}
+                \textbf{• Towards Automated Identification of Data Constraints in Software Documentation}
+
+                % \vspace{0.10 cm}
+
+                \mbox{Ying Zhou}, \mbox{\textbf{Miao Miao}}, \mbox{Vlad Birsan}, \mbox{Oscar Chaparro}, \mbox{Shiyi Wei}, and \mbox{Andrian Marcus}.
+                
+                % \vspace{0.10 cm}
+                
+                \textit{Under review at Empirical Software Engineering Journal, 2025.}
+            \end{onecolentry}
+
+        % \end{samepage}
+
+        
+    \section{RESEARCH EXPERIENCE}
+        
+        \begin{twocolentry}{
+        \textit{Jan 2025 – Present}}
+            \textbf{Fuzzing Bottleneck Localization}
+        \end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Conduct experiments to identify fuzzing blockers across different fuzzers (e.g., AFL++, LibFuzzer, Honggfuzz) using Fuzz-Introspector.  
+                \item Analyze the impact of various factors on fuzzing blocker detection, including branch side hit frequency, number of trials, and runtime.  
+                \item Investigate and localize the root causes of fuzzing blockers specific to each fuzzer.  
+                \item Perform differential testing to evaluate how fuzzer design influences fuzzing blockers.  
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+
+        \begin{twocolentry}{
+        \textit{May 2024 – Nov 2024}}
+            \textbf{Program Feature-based Benchmarking for Fuzz Testing}
+        \end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Performed a literature review of 25 recent grey-box fuzzing papers to extract fine-grained program features from their claimed improvements. 
+                \item Created the first feature-based benchmark that defines 10 configurable parameters for the extracted program features with 153 generated programs. 
+                \item Evaluated 11 popular fuzzers to understand fuzzer behaviors and the impact of each program parameter on their performance. 
+
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+        \textit{May 2024 – Nov 2024}}
+            \textbf{Visualization Task Taxonomy to Understand the Fuzzing Internals}
+        \end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+            \item Conducted semi-structured interviews with fuzzing experts. 
+            \item Systematically extracted the task taxonomy from the interview data through qualitative data analysis. 
+            \item Evaluated the support of existing visualization tools for fuzzing through the lens of our taxonomy. 
+            \end{highlights}
+        \end{onecolentry}
+
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+        \textit{June 2023 – Aug 2024}}
+            \textbf{An Extensive Empirical Study of Nondeterministic Behavior in Static Analysis Tools}
+        \end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+
+            \item Performed qualitative analysis of the repositories of 11 popular static analysis tools that shows common nondeterministic issues and categorizes their root causes.
+            \item Constructed an experiment framework and conducted empirical study that detects previously unknown nondeterministic behaviors in tools such as SOOT, WALA, DOOP, FlowDroid, PyCG and Infer.
+            \item Debugged root causes of discovered nondeterministic bugs and reported them to tool developers.
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+        \textit{Sep 2022 – Dec 2023}}
+            \textbf{Towards Automated Identification of Data Constraints in Software Documentation}
+        \end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+            \item Identified and validated the data constraints in requirements documentation which specify allowed data values in software systems.
+            \item Identified 15 discourse patterns, commonly used to describe data constraints in natural language. 
+            \item Debugged and evaluated an NLP-based automated splitter which breaks down a sentence to fragments based on the developed discourse patterns. These patterns are used as features for machine learning.
+            \item Trained and evaluated 5 machine learning classifiers for automatically extracting data constraints.
+            \end{highlights}
+        \end{onecolentry}
+
+
+    \section{INDUSTRY EXPERIENCE}
+
+        \begin{twocolentry}{
+        \textit{May 2022 – Aug 2022}
+        }
+        
+        \textbf{iOS Engineering Intern, }Tinder Inc.  
+        
+        \end{twocolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+        \textit{Aug 2019 – June 2021}
+        }
+        
+        \textbf{iOS Developer}, LotusFlare Inc.   
+        
+        \end{twocolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{
+        \textit{Apr 2018 – Apr 2019}
+        }
+        
+        \textbf{Junior Software Engineer}, KA Software 
+        
+        \end{twocolentry}
+
+        \vspace{0.2 cm}
+
+
+    \section{TEACHING EXPERIENCE}
+    
+    \textbf{Teaching Assistant}
+    
+    \textit{* Contributed to curriculum development and design of projects and assignments; Provided video and in-class tutorials to guide students through project implementation.}
+    
+    \begin{onecolentry}
+        \begin{highlights}
+        \item CS/SE 6356: Software Maintenance Evolution and Re-Engineering (Spring 2023)
+        \item CS 4386: Compiler Design (Fall 2023)
+        \item CS 6353: Compiler Construction (Spring 2024)
+        \end{highlights}
+    \end{onecolentry}
+
+    \section{SERVICES}
+    \begin{onecolentry}
+        \begin{highlights}
+        \item Artifact Evaluation Committee member: the 46th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI 2025).
+
+        \item Junior Program Committee member: the 22nd International Conference on Mining Software Repositories (MSR 2025).
+        \item Mentored four high school students and three undergraduate students in the UTD K-12 Summer Research Program and Clarks Summer Research Program (Summer 2023, Summer 2024).
+        \item Student Volunteer: the 47th IEEE/ACM International Conference on Software Engineering (ICSE 2025).
+        \item Student Volunteer: the 32nd ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA 2023).
+        \item Sub-review: CCS2025, USENIX2025, ISSTA2025, ICSE2025, FSE2025, USENIX2024, MSR2025, ISSTA2024, ICSE2024, FSE2024, ASE2024, FSE 2023, ISSTA 2023, SecDev 2023, ICSE 2023.
+        \end{highlights}
+    \end{onecolentry}
+    
+\end{document}
